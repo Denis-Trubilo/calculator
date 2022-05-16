@@ -1,14 +1,18 @@
 const calc = function() {
-    let screen = document.getElementById('screen'); // ищем результат
     let a = '';
     let b = '';
+    let c = '';
     let operation = '';
-    let finish = false;    
+    let finish = false; 
+    let pr = false;   
     
+    let screen = document.getElementById('screen');
     let numbers = document.querySelectorAll(`[data-num]`);
     let oper = document.querySelectorAll(`[data-id]`);
     let ac = document.querySelector(`[data-ac]`);
     let equally = document.querySelector(`[data-equally]`);
+    let percent = document.querySelector(`[data-pr]`);
+    
     
     numbers.forEach(function(elem){
         elem.addEventListener('click', function(event){					
@@ -17,16 +21,20 @@ const calc = function() {
                     a += event.target.textContent;							
                     screen.innerText = a;
                 }
-                else if (a !== '' && b !== '' && finish) {
+                else if (a !== '' && b !== '' && finish && !pr) {
                     b = event.target.textContent;
                     finish = false;
                     screen.innerText = b;
                 }
+                // else if (a !== '' && b !== '' && finish && pr) {
+                //     b = event.target.textContent;
+                //     finish = false;
+                //     screen.innerText = b;
+                // }
                 else {
                     b += event.target.textContent;
                     screen.innerText = b;
-                }
-                    
+                }                   
                 return;
             }
         });
@@ -49,19 +57,29 @@ const calc = function() {
     ac.addEventListener('click', function(){
         a = '';
         b = '';
+        c = '';
         operation = '';
         finish = false;
+        pr = false;
         screen.textContent = '0';
         oper.forEach(function(el){
             el.classList.remove('active')
         });
     });
 
+    percent.addEventListener('click', function(){
+        if(b === '') {
+            c = (+a) / 100;
+        } else {
+            c = (+a) * (+b) / 100;
+        }
+        pr = true;
+        screen.textContent = c;
+        return;
+    })
+
     equally.addEventListener('click', function(event){
-        if(event.target.textContent === '='){
-            oper.forEach(function(el){
-                el.classList.remove('active')
-            });
+        if(event.target.textContent === '=' && !pr){
             switch (operation) {
                 case '+':
                     a = (+a) + (+b);
@@ -82,11 +100,42 @@ const calc = function() {
                     }
                     a = a / b;
                     break;
-                case '%':
-                    a = a / '100';
-                    break;
                 case '+/-':
                     a = a / '-1';
+                    break;
+            }
+            finish = true;
+            screen.textContent = a;	
+        }
+        if(event.target.textContent === '=' && pr){
+            switch (operation) {
+                case '+':
+                    a = (+a) + c;
+                    break;
+                case '-':
+                    a = a - c;
+                    break;
+                case 'x':
+                    a = a * c;
+                    break;
+                case '/':
+                    if(b === '0'){
+                        screen.textContent = 'Ошибка';
+                        a = '';
+                        b = '';
+                        operation = '';
+                        return;
+                    } else {
+                        a = a / c;
+                    }
+                    break;
+                    
+                case '+/-':
+                    if(b === '') {
+                        a = c / '-1';
+                    } else {
+                        a = a / '-1';
+                    }            
                     break;
             }
             finish = true;
