@@ -12,8 +12,7 @@ const calc = function() {
     let ac = document.querySelector(`[data-ac]`);
     let equally = document.querySelector(`[data-equally]`);
     let percent = document.querySelector(`[data-pr]`);
-    
-    
+       
     numbers.forEach(function(elem){
         elem.addEventListener('click', function(event){					
             if(event.target.textContent) {
@@ -26,11 +25,6 @@ const calc = function() {
                     finish = false;
                     screen.innerText = b;
                 }
-                // else if (a !== '' && b !== '' && finish && pr) {
-                //     b = event.target.textContent;
-                //     finish = false;
-                //     screen.innerText = b;
-                // }
                 else {
                     b += event.target.textContent;
                     screen.innerText = b;
