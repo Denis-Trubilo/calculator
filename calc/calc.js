@@ -98,7 +98,7 @@ const calc = function() {
                         operation = '';
                         return;
                     }
-                    a = a / b;
+                    a = Math.ceil(a / b * 10000) / 10000;
                     break;
                 case '+/-':
                     a = a / '-1';
@@ -126,7 +126,7 @@ const calc = function() {
                         operation = '';
                         return;
                     } else {
-                        a = a / c;
+                        a = Math.ceil(a / c * 10000) / 10000;
                     }
                     break;
                     
